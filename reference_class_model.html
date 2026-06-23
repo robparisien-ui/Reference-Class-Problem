@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Does the Surgical Innovation Literature Apply to You? &mdash; Interactive Utility Model</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: #fff; color: #1a1a1a; padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
+  h1 { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 24px; line-height: 1.6; }
+  .main-grid { display: grid; grid-template-columns: 380px 1fr; gap: 40px; align-items: start; }
+  .controls { position: sticky; top: 32px; }
+  .results { min-width: 0; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 24px; line-height: 1.6; }
+  .sh { font-size: 11px; font-weight: 600; color: #888; margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 0.5px solid #e5e5e5; padding-bottom: 4px; }
+  .pr { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+  .pl { font-size: 13px; color: #444; line-height: 1.4; }
+  .pl small { display: block; font-size: 11px; color: #999; margin-top: 1px; }
+  .slider-row { display: flex; align-items: center; gap: 12px; }
+  .pv { font-size: 13px; font-weight: 600; min-width: 56px; text-align: right; color: #1a1a1a; }
+  input[type=range] { flex: 1; accent-color: #185FA5; cursor: pointer; }
+  .vgrid-wide { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
+  .vcell label { font-size: 11px; color: #888; display: block; margin-bottom: 3px; }
+  .vcell .vtag { font-size: 11px; color: #999; font-style: italic; margin-top: 3px; }
+  .vcell input[type=number] { width: 100%; font-size: 14px; padding: 6px 8px; border: 0.5px solid #ccc; border-radius: 6px; }
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 0 0 16px; }
+  .card { background: #f7f7f5; border-radius: 8px; padding: 12px; }
+  .card-vol { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+  .card-be { font-size: 22px; font-weight: 500; }
+  .card-note { font-size: 11px; color: #888; margin-top: 2px; }
+  .card-sub { font-size: 11px; color: #666; margin-top: 5px; line-height: 1.5; }
+  .card-u { font-size: 14px; font-weight: 500; margin-top: 5px; }
+  .pos { color: #3B6D11; } .neg { color: #A32D2D; }
+  .chart-wrap { position: relative; width: 100%; height: 440px; margin-top: 8px; }
+  .chart-note { font-size: 11px; color: #888; margin-top: 10px; line-height: 1.7; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
+  .legend-swatch { width: 24px; height: 3px; border-radius: 2px; }
+  hr { border: none; border-top: 0.5px solid #e5e5e5; margin: 24px 0; }
+  .equation { background: #f7f7f5; border-left: 3px solid #185FA5; border-radius: 0 8px 8px 0; padding: 12px 14px; font-size: 12px; color: #333; line-height: 2.0; margin-bottom: 16px; }
+  .equation code { font-family: "SF Mono", "Fira Mono", monospace; font-size: 11px; background: #e8e8e8; padding: 1px 5px; border-radius: 3px; }
+  .instructions { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 20px; border: 0.5px solid #e5e5e5; border-radius: 8px; overflow: hidden; }
+  .instr-col { padding: 14px 18px; }
+  .instr-col:first-child { border-right: 0.5px solid #e5e5e5; }
+  .instr-col h3 { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .instr-row { display: flex; gap: 8px; margin-bottom: 7px; font-size: 12px; line-height: 1.5; }
+  .instr-var { font-family: "SF Mono", "Fira Mono", monospace; font-size: 11px; background: #f0f0ee; padding: 1px 6px; border-radius: 4px; color: #333; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+  .instr-desc { color: #555; }
+</style>
+</head>
+<body>
+
+<h1><strong>Does the Surgical Innovation Literature Apply to You?</strong> <em style="font-weight:400;">The Reference Class Problem</em></h1>
+<p class="subtitle">
+  Volume-stratified utility model &mdash; why the same evidence yields different answers for different surgeons. DAA vs PA hemiarthroplasty, worked example.<br>
+  Parisien R. <em>Clinical Orthopaedics and Related Research</em>, 2026 (in preparation) &mdash; interactive supplement.
+</p>
+
+<div class="main-grid">
+<div class="controls">
+
+<div class="equation">
+  <strong>U(n)</strong> = &sum;<sub>i=1</sub><sup>n</sup> [ B(i) &minus; H(i) ]
+  <br>
+  <code>B(i) = (1/NNT) &times; W<sub>b</sub></code>
+  <br>
+  <code>H(i) = (P<sub>max</sub> &minus; P<sub>base</sub>) &times; e<sup>&minus;&lambda;i</sup> &times; W<sub>h</sub></code>
+  <br>
+  Break-even case n* solves U(n*) = 0
+  <br>
+  Break-even time T* = n* / V
+</div>
+
+<div class="sh">How large is the benefit?</div>
+<div class="pr">
+  <span class="pl">NNT <small>Cases of DAA needed to prevent one dislocation over modern PA with capsule repair. High-quality evidence (Maratt 2016, Malek 2016) suggests NNT &ge;100.</small></span>
+  <div class="slider-row">
+    <input type="range" min="10" max="190" step="5" value="100" id="nnt">
+    <span class="pv" id="nnt-out">100</span>
+  </div>
+</div>
+
+<div class="sh">How fast do I learn?</div>
+<div class="pr">
+  <span class="pl">&lambda; &mdash; learning curve decay constant <small>Published CUSUM plateaus (43&ndash;100 cases) imply &lambda; &asymp; 0.03&ndash;0.07. Higher values model exceptionally fast learners (&lambda; = 0.30 &asymp; proficiency by case 10).</small></span>
+  <div class="slider-row">
+    <input type="range" min="0.01" max="0.30" step="0.005" value="0.05" id="lam">
+    <span class="pv" id="lam-out">0.050</span>
+  </div>
+</div>
+
+<div class="sh">How bad is a serious complication?</div>
+<div class="pr">
+  <span class="pl">W<sub>h</sub> &mdash; complication severity <small>Anchored to reoperation probability: periprosthetic fractures require reoperation in nearly all cases vs. ~20&ndash;30% for dislocations, yielding a base ratio of &asymp;3. This is conservative &mdash; reoperation alone understates the additional morbidity of fracture revision.</small></span>
+  <div class="slider-row">
+    <input type="range" min="1" max="5" step="0.1" value="3" id="wh">
+    <span class="pv" id="wh-out">3.0</span>
+  </div>
+</div>
+
+<p style="font-size:11px; color:#999; line-height:1.6; margin-top:12px;">
+  Three parameters are held constant: benefit of a prevented dislocation = 1 (reference unit); serious complication rate at case&nbsp;1 = 7% (Dall&rsquo;Oca, Foissey, Shen); baseline rate once proficient = 2% (Kahn, Lygrisse).
+</p>
+
+</div>
+<div class="results">
+
+<div class="sh">Annual volume tiers</div>
+<div class="vgrid-wide">
+  <div class="vcell"><label>V1 &mdash; cases/yr</label><input type="number" min="1" max="100" value="8" id="v1"><div class="vtag">occasional on-call</div></div>
+  <div class="vcell"><label>V2 &mdash; cases/yr</label><input type="number" min="1" max="200" value="20" id="v2"><div class="vtag">every 2&ndash;3 weeks</div></div>
+  <div class="vcell"><label>V3 &mdash; cases/yr</label><input type="number" min="1" max="300" value="40" id="v3"><div class="vtag">weekly</div></div>
+  <div class="vcell"><label>V4 &mdash; cases/yr</label><input type="number" min="1" max="500" value="80" id="v4"><div class="vtag">high-volume community</div></div>
+</div>
+
+<div class="cards" id="cards"></div>
+
+<div class="legend" id="legend"></div>
+<div class="chart-wrap"><canvas id="chart"></canvas></div>
+
+<p class="chart-note">
+  Each curve shows cumulative incremental net utility for a surgeon transitioning from PA to DAA, stratified by annual case volume. The <span style="background:rgba(180,0,0,0.08); padding:0 3px; border-radius:2px; color:#A32D2D;">shaded region</span> below zero represents net harm to the cumulative patient population relative to continuing with PA. Filled circles mark the break-even point for each volume tier. Harm term = excess serious complication rate above PA baseline &times; W<sub>h</sub>, decaying exponentially to zero at proficiency. Dislocation is handled by the NNT benefit term; LFCN and minor wound events are excluded from the harm term.
+</p>
+
+</div>
+</div>
+
+<hr>
+
+<div class="instructions">
+  <div class="instr-col">
+    <h3>Parameter key</h3>
+    <div class="instr-row"><span class="instr-var">NNT</span><span class="instr-desc">How many cases of DAA needed to prevent one additional dislocation over modern PA with capsule repair. Higher = smaller benefit per case.</span></div>
+    <div class="instr-row"><span class="instr-var">&lambda;</span><span class="instr-desc">How quickly the serious complication rate decays toward baseline. Proficiency is reached at approximately 3/&lambda; cases: &lambda; = 0.03 &rarr; ~100 cases; &lambda; = 0.05 &rarr; ~60 cases; &lambda; = 0.07 &rarr; ~43 cases; &lambda; = 0.15 &rarr; ~20 cases; &lambda; = 0.30 &rarr; ~10 cases.</span></div>
+    <div class="instr-row"><span class="instr-var">W<sub>h</sub></span><span class="instr-desc">How many prevented dislocations a single serious complication &ldquo;costs.&rdquo; Default of 3 is anchored to the ratio of reoperation probabilities: periprosthetic fractures require reoperation in nearly all cases vs. ~20&ndash;30% for dislocations. This is conservative; reoperation alone understates the full morbidity difference.</span></div>
+    <div class="instr-row" style="margin-top:8px; padding-top:8px; border-top:0.5px solid #eee;"><span class="instr-var" style="color:#999;">Fixed</span><span class="instr-desc" style="color:#999;">Benefit reference unit = 1. Initial serious complication rate = 7%. Baseline (proficient) rate = 2%. See parameter sources below.</span></div>
+  </div>
+  <div class="instr-col">
+    <h3>How to explore the model</h3>
+    <div class="instr-row"><span class="instr-var">NNT</span><span class="instr-desc">Slide left toward 20 to model older literature (inflated benefit). Slide right toward 100&ndash;200 for modern high-quality evidence. Watch how the break-even horizon shifts.</span></div>
+    <div class="instr-row"><span class="instr-var">W<sub>h</sub></span><span class="instr-desc">Default of 3 is a conservative lower bound based on reoperation ratios. Increase toward 4&ndash;5 to account for the full morbidity gap between fracture revision and closed reduction. This is the most sensitive parameter.</span></div>
+    <div class="instr-row"><span class="instr-var">&lambda;</span><span class="instr-desc">Slide left for a slower learner (~100 cases to proficiency in a community setting without mentorship). Slide right for a faster one (~10 cases for an exceptionally fast learner). Even at the fastest plausible learning rate, low-volume surgeons face extended break-even horizons.</span></div>
+    <div class="instr-row"><span class="instr-var">Volumes</span><span class="instr-desc">Set V1&ndash;V4 to reflect your institution&rsquo;s volume tiers. The key question: at your annual volume, does the curve ever cross zero within a realistic career horizon?</span></div>
+    <div class="instr-row" style="margin-top:6px; padding-top:6px; border-top:0.5px solid #eee;"><span style="font-size:12px; color:#888; font-style:italic;">Curves above the zero line = net benefit to your cumulative patient population. Shaded region below zero = net harm.</span></div>
+  </div>
+</div>
+
+<hr>
+<p style="font-size:11px; color:#aaa; line-height:1.9;">
+  <strong>Parameter sources &mdash;</strong>
+  P<sub>max</sub>: Dall&rsquo;Oca et al. <em>Acta Biomed</em> 2020 (<a href="https://doi.org/10.23750/abm.v91i4-S.9728" style="color:#aaa;">DOI</a>);
+  Foissey et al. <em>SICOT-J</em> 2020 (<a href="https://doi.org/10.1051/sicotj/2020015" style="color:#aaa;">DOI</a>);
+  Shen et al. <em>Orthop Surg</em> 2022 (<a href="https://doi.org/10.1111/os.13231" style="color:#aaa;">DOI</a>).
+  P<sub>baseline</sub>: Kahn et al. <em>J Arthroplasty</em> 2022 (<a href="https://doi.org/10.1016/j.arth.2022.01.042" style="color:#aaa;">DOI</a>);
+  Lygrisse et al. <em>J Arthroplasty</em> 2021 (<a href="https://doi.org/10.1016/j.arth.2021.04.026" style="color:#aaa;">DOI</a>).
+  &lambda;: Shen (n=43), Malhotra (n=82), Van Den Eeden (n=100) CUSUM analyses.
+  NNT: Maratt et al. <em>J Arthroplasty</em> 2016 (<a href="https://doi.org/10.1016/j.arth.2016.02.071" style="color:#aaa;">DOI</a>);
+  Malek et al. <em>Bone Joint J</em> 2016 (<a href="https://doi.org/10.1302/0301-620X.98B6.36608" style="color:#aaa;">DOI</a>).
+  W<sub>h</sub>: anchored to reoperation probability ratio &mdash; periprosthetic fracture (~100%) vs. dislocation (~20&ndash;30%); sources TBD.
+</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const YEARS = 20;
+const COLORS = ['#185FA5','#3B6D11','#BA7517','#993556'];
+const VTAGS = ['occasional on-call','every 2-3 wks','weekly','high-volume'];
+
+function computeSeries(V, nnt, wb, pmax, pbase, lam, wh) {
+  const utils = [0];
+  let cum = 0;
+  const b = (1/nnt)*wb;
+  for (let yr = 1; yr <= YEARS; yr++) {
+    const start = (yr-1)*V;
+    for (let c = 0; c < V; c++) {
+      const i = start+c+1;
+      cum += b - (pmax-pbase)*Math.exp(-lam*i)*wh;
+    }
+    utils.push(parseFloat(cum.toFixed(3)));
+  }
+  return utils;
+}
+
+function findBE(V, nnt, wb, pmax, pbase, lam, wh) {
+  let cum = 0;
+  const b = (1/nnt)*wb;
+  const maxCases = YEARS * V;
+  for (let i = 1; i <= maxCases; i++) {
+    cum += b - (pmax-pbase)*Math.exp(-lam*i)*wh;
+    if (cum >= 0) return i / V;
+  }
+  return null;
+}
+
+function fmtBE(be) {
+  if (be === null) return '&gt;20 yr';
+  const yrs = Math.floor(be);
+  const mos = Math.round((be - yrs) * 12);
+  if (mos === 0) return yrs + ' yr';
+  if (mos === 12) return (yrs + 1) + ' yr';
+  return yrs + ' yr ' + mos + ' mo';
+}
+
+function makeHarmPlugin(yMin, zeroY) {
+  return {
+    id: 'harmShade',
+    beforeDatasetsDraw(chart) {
+      const {ctx, chartArea: {left, right}, scales: {y}} = chart;
+      const z = y.getPixelForValue(0);
+      const bottom = y.getPixelForValue(y.min);
+      if (bottom <= z) return;
+      ctx.save();
+      ctx.fillStyle = 'rgba(180,0,0,0.07)';
+      ctx.fillRect(left, z, right-left, bottom-z);
+      ctx.restore();
+    }
+  };
+}
+
+let chart = null;
+
+function update() {
+  const nnt   = parseFloat(document.getElementById('nnt').value);
+  const wb    = 1;
+  const pmax  = 0.07;
+  const pbase = 0.02;
+  const lam   = parseFloat(document.getElementById('lam').value);
+  const wh    = parseFloat(document.getElementById('wh').value);
+  const vols  = [
+    parseInt(document.getElementById('v1').value)||8,
+    parseInt(document.getElementById('v2').value)||20,
+    parseInt(document.getElementById('v3').value)||40,
+    parseInt(document.getElementById('v4').value)||80,
+  ];
+
+  document.getElementById('nnt-out').textContent   = Math.round(nnt);
+  document.getElementById('lam-out').textContent   = lam.toFixed(3);
+  document.getElementById('wh-out').textContent    = wh.toFixed(1);
+
+  const series = vols.map(V => computeSeries(V, nnt, wb, pmax, pbase, lam, wh));
+
+  const lineDatasets = series.map((u, idx) => ({
+    label: vols[idx]+'/yr',
+    data: u.map((val, yr) => ({x: yr, y: val})),
+    borderColor: COLORS[idx],
+    backgroundColor: 'transparent',
+    borderWidth: 2.5,
+    pointRadius: 0,
+    tension: 0.4,
+    order: 2,
+  }));
+
+  const dotDatasets = vols.map((V, idx) => {
+    const be = findBE(V, nnt, wb, pmax, pbase, lam, wh);
+    if (be === null) return { type:'scatter', data:[], order:1, label:'_be'+idx };
+    return {
+      type: 'scatter',
+      label: '_be'+idx,
+      data: [{x: be, y: 0}],
+      backgroundColor: COLORS[idx],
+      borderColor: '#fff',
+      borderWidth: 1.8,
+      pointRadius: 6,
+      pointHoverRadius: 7,
+      order: 1,
+    };
+  });
+
+  const allVals = series.flat();
+  const minU = Math.min(...allVals);
+  const maxU = Math.max(...allVals);
+  const pad = Math.abs(maxU-minU)*0.12||0.5;
+  const yMin = parseFloat((minU-pad).toFixed(2));
+  const yMax = parseFloat((maxU+pad).toFixed(2));
+
+  if (chart) {
+    chart.data.datasets = [...lineDatasets, ...dotDatasets];
+    chart.options.scales.y.min = yMin;
+    chart.options.scales.y.max = yMax;
+    chart.update('none');
+  } else {
+    chart = new Chart(document.getElementById('chart'), {
+      type: 'line',
+      data: { datasets: [...lineDatasets, ...dotDatasets] },
+      plugins: [makeHarmPlugin()],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        interaction: { mode:'index', intersect:false },
+        plugins: {
+          legend: { display:false },
+          tooltip: {
+            filter: item => !item.dataset.label?.startsWith('_'),
+            callbacks: {
+              title: items => 'Year '+Math.round(items[0].parsed.x),
+              label: ctx => '  '+ctx.dataset.label+':  U = '+ctx.parsed.y.toFixed(2)
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'linear',
+            min: 0,
+            max: YEARS,
+            title: { display:true, text:'Years after adoption of new approach', font:{size:12}, color:'#666' },
+            ticks: { color:'#888', font:{size:11}, stepSize: 2 },
+            grid: { color:'rgba(0,0,0,0.06)' }
+          },
+          y: {
+            title: { display:true, text:'Cumulative net utility  U(n)', font:{size:12}, color:'#666' },
+            ticks: { color:'#888', font:{size:11}, callback: v => v.toFixed(1) },
+            grid: {
+              color: ctx => ctx.tick.value===0 ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.06)',
+              lineWidth: ctx => ctx.tick.value===0 ? 1.6 : 1,
+            },
+            min: yMin,
+            max: yMax,
+          }
+        }
+      }
+    });
+  }
+
+  document.getElementById('cards').innerHTML = vols.map((V, idx) => {
+    const s = series[idx];
+    const be = findBE(V, nnt, wb, pmax, pbase, lam, wh);
+    const u20 = s[YEARS];
+    const beCl = (be !== null && be<=YEARS) ? 'pos' : 'neg';
+    const uCl  = u20>=0 ? 'pos' : 'neg';
+    const balanceLabel = u20>=0 ? 'net benefit' : 'net harm';
+    return `<div class="card">
+      <div class="card-vol" style="color:${COLORS[idx]}">${V}/yr &mdash; ${VTAGS[idx]}</div>
+      <div class="card-be ${beCl}">${fmtBE(be)}</div>
+      <div class="card-note">break-even</div>
+      <div class="card-u ${uCl}">${u20>=0?'+':''}${u20.toFixed(1)} at 20 yr</div>
+      <div class="card-note">${balanceLabel} to patient population</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('legend').innerHTML = vols.map((V, idx) =>
+    `<div class="legend-item">
+      <div class="legend-swatch" style="background:${COLORS[idx]}"></div>
+      ${V}/yr &mdash; ${VTAGS[idx]}
+    </div>`
+  ).join('');
+}
+
+['nnt','lam','wh'].forEach(id =>
+  document.getElementById(id).addEventListener('input', update));
+['v1','v2','v3','v4'].forEach(id =>
+  document.getElementById(id).addEventListener('change', update));
+
+update();
+</script>
+</body>
+</html>
